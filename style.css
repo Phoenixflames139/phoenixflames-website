@@ -68,3 +68,59 @@ footer {
   padding: 40px 20px;
   color: #888;
 }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 18px 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(10px);
+
+  z-index: 1000;
+}
+
+.brand {
+  color: #f3b33d;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.nav-links a:hover {
+  color: #f3b33d;
+}
+
+@media (max-width: 700px) {
+
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-links {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+  }
+}
