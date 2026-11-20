@@ -107,8 +107,10 @@
       const finishArrival = () => clearTransition();
       const panel = layer.querySelector('.pf-curtain');
       panel.addEventListener('animationend', (event) => {
-        if (event.animationName === 'pf-fire-reveal') finishArrival();
-      }, { once: true });
+        if (event.target === panel && event.animationName === 'pf-fire-reveal') {
+          finishArrival();
+        }
+      });
       setTimeout(finishArrival, 850);
     }
 
@@ -154,9 +156,12 @@
         navigated = true;
         location.assign(url.href);
       };
-      layer.querySelector('.pf-curtain').addEventListener('animationend', (e) => {
-        if (e.animationName === 'pf-fire-cover') navigate();
-      }, { once: true });
+      const panel = layer.querySelector('.pf-curtain');
+      panel.addEventListener('animationend', (e) => {
+        if (e.target === panel && e.animationName === 'pf-fire-cover') {
+          navigate();
+        }
+      });
       setTimeout(navigate, 780);
     });
 
