@@ -1,0 +1,181 @@
+/* Phoenixflames | Cinematic page transitions v1
+   Theme is based on the DESTINATION page. CSS-only animated visual layer;
+   progressive enhancement, no external assets or libraries. */
+html.pf-arriving::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: #080403;
+  pointer-events: none;
+}
+html.pf-arriving.pf-ready::before { display: none; }
+
+.pf-transition {
+  --pf-outer: #bd4214;
+  --pf-hot: #ff9b3b;
+  --pf-bright: #ffdfa0;
+  --pf-spark: #ffd294;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  isolation: isolate;
+}
+.pf-transition.pf-entering,
+.pf-transition.pf-exiting {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Fire Shows: fiery and dramatic. */
+.pf-theme-shows {
+  --pf-outer: #cb3410;
+  --pf-hot: #ff7a19;
+  --pf-bright: #ffe095;
+  --pf-spark: #ffce70;
+}
+/* Workshops: Flow Arts' cool-and-warm light trails. */
+.pf-theme-workshops {
+  --pf-outer: #652b7d;
+  --pf-hot: #d36bba;
+  --pf-bright: #b3baff;
+  --pf-spark: #9dcfff;
+}
+/* Fire Tools: forge, heated metal and sparks. */
+.pf-theme-tools {
+  --pf-outer: #9b3010;
+  --pf-hot: #ffaf35;
+  --pf-bright: #fff0ae;
+  --pf-spark: #ffdb88;
+}
+/* Gallery: softer golden embers. */
+.pf-theme-gallery {
+  --pf-outer: #784014;
+  --pf-hot: #dfa24d;
+  --pf-bright: #f6d7a0;
+  --pf-spark: #f5d49a;
+}
+.pf-theme-booking,
+.pf-theme-thanks {
+  --pf-outer: #914112;
+  --pf-hot: #efaa4a;
+  --pf-bright: #ffe6a7;
+}
+.pf-theme-legal {
+  --pf-outer: #6a3416;
+  --pf-hot: #bf8045;
+  --pf-bright: #e6b989;
+}
+
+.pf-curtain {
+  position: absolute;
+  top: -18svh;
+  left: -5%;
+  width: 110%;
+  height: 137svh;
+  transform: translate3d(0, 115%, 0);
+  will-change: transform;
+  background:
+    radial-gradient(ellipse at 50% 1%, var(--pf-bright), transparent 12%),
+    linear-gradient(
+      to bottom,
+      var(--pf-hot) 0%,
+      var(--pf-outer) 11%,
+      #38170d 27%,
+      #100806 46%,
+      #050505 75%
+    );
+  box-shadow: 0 -30px 85px 20px rgba(252, 106, 28, .28);
+}
+
+.pf-edge {
+  position: absolute;
+  top: -11svh;
+  left: 0;
+  width: 100%;
+  height: 24svh;
+  opacity: .96;
+  background:
+    radial-gradient(ellipse 7% 76% at 3% 100%, var(--pf-bright) 25%, transparent 72%),
+    radial-gradient(ellipse 10% 98% at 12% 100%, var(--pf-hot) 25%, transparent 70%),
+    radial-gradient(ellipse 6% 61% at 23% 100%, var(--pf-bright) 20%, transparent 78%),
+    radial-gradient(ellipse 8% 95% at 34% 100%, var(--pf-hot) 25%, transparent 73%),
+    radial-gradient(ellipse 9% 65% at 46% 100%, var(--pf-bright) 22%, transparent 75%),
+    radial-gradient(ellipse 8% 100% at 56% 100%, var(--pf-hot) 22%, transparent 72%),
+    radial-gradient(ellipse 7% 67% at 68% 100%, var(--pf-bright) 22%, transparent 76%),
+    radial-gradient(ellipse 10% 96% at 80% 100%, var(--pf-hot) 20%, transparent 73%),
+    radial-gradient(ellipse 8% 70% at 91% 100%, var(--pf-bright) 24%, transparent 76%);
+  filter: blur(5px);
+  animation: pf-flame-flicker .34s ease-in-out infinite alternate;
+}
+
+.pf-tongue {
+  position: absolute;
+  top: -12svh;
+  left: var(--left);
+  width: clamp(45px, 13vw, 230px);
+  height: var(--height);
+  border-radius: 45% 65% 48% 52% / 85% 85% 35% 35%;
+  transform: rotate(var(--angle));
+  transform-origin: center bottom;
+  background: radial-gradient(ellipse at 50% 100%, var(--pf-bright) 0%, var(--pf-hot) 36%, var(--pf-outer) 73%, transparent 79%);
+  opacity: .83;
+  filter: blur(4px);
+  animation: pf-tongue-dance .45s ease-in-out infinite alternate;
+  animation-delay: var(--delay);
+}
+.pf-tongue:nth-of-type(2n) { opacity: .67; filter: blur(7px); }
+
+.pf-sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pf-sparks i {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--bottom);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--pf-spark);
+  opacity: .7;
+  box-shadow: 0 0 8px 2px var(--pf-hot);
+  animation: pf-spark-rise var(--t) linear infinite;
+  animation-delay: var(--delay);
+}
+.pf-transition.pf-exiting .pf-curtain {
+  animation: pf-fire-cover .62s cubic-bezier(.16,.73,.31,1) both;
+}
+.pf-transition.pf-entering .pf-curtain {
+  animation: pf-fire-reveal .67s cubic-bezier(.55,.08,.65,1) both;
+}
+@keyframes pf-fire-cover {
+  from { transform: translate3d(0, 115%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+@keyframes pf-fire-reveal {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -115%, 0); }
+}
+@keyframes pf-flame-flicker {
+  from { opacity: .78; transform: translate3d(-1%, 1%, 0) scaleY(.95); }
+  to   { opacity: 1; transform: translate3d(1%, -1%, 0) scaleY(1.04); }
+}
+@keyframes pf-tongue-dance {
+  from { transform: rotate(calc(var(--angle) - 4deg)) scaleY(.9); }
+  to   { transform: rotate(calc(var(--angle) + 5deg)) scaleY(1.10); }
+}
+@keyframes pf-spark-rise {
+  from { transform: translate3d(0, 18px, 0) scale(.7); opacity: 0; }
+  16% { opacity: .78; }
+  75% { opacity: .45; }
+  to { transform: translate3d(var(--dx), -68svh, 0) scale(.16); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-transition,
+  html.pf-arriving::before { display: none !important; }
+}
