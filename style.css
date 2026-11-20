@@ -504,6 +504,16 @@ main {
   margin-top: 24px;
 }
 
+.cta-section + .cta-section {
+  border-top: 1px solid var(--line);
+}
+
+.instagram-showcase .eyebrow {
+  color: var(--gold);
+  font-size: 0.8rem;
+}
+
+
 
 /* ==================================================
    GALLERY PLACEHOLDERS
