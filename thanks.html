@@ -28,6 +28,32 @@
       <p class="eyebrow">Message received</p>
       <h1>Thank you.</h1>
 
+      <div class="thanks-emblem" aria-label="Phoenixflames Emblem-Animation">
+        <img
+          id="thanks-emblem-fallback"
+          src="/LogoKlein.jpg"
+          alt="Phoenixflames Emblem"
+          width="320"
+          height="320"
+        >
+        <video
+          id="thanks-emblem-video"
+          aria-label="Animiertes Phoenixflames Emblem"
+          autoplay
+          muted
+          playsinline
+          controls
+          preload="metadata"
+          width="320"
+          height="320"
+          hidden
+        >
+          <source src="/Emblem.mp4" type="video/mp4">
+          Dein Browser unterstützt die Videowiedergabe nicht.
+        </video>
+      </div>
+
+      <p class="thanks-tagline">Your spark has reached us.</p>
       <p>
         Deine Anfrage wurde übermittelt. Wir melden uns so bald wie möglich bei dir.
       </p>
@@ -46,5 +72,30 @@
       </nav>
     </div>
   </footer>
+
+  <script>
+    // Show the video only after the MP4 is actually available;
+    // otherwise keep the existing emblem as a graceful fallback.
+    const emblemVideo = document.getElementById('thanks-emblem-video');
+    const emblemFallback = document.getElementById('thanks-emblem-fallback');
+
+    function revealEmblemVideo() {
+      emblemFallback.hidden = true;
+      emblemVideo.hidden = false;
+      emblemVideo.play().catch(() => {
+        // If autoplay is blocked, visitors can use the native play control.
+      });
+    }
+
+    emblemVideo.addEventListener('loadeddata', revealEmblemVideo, { once: true });
+    emblemVideo.addEventListener('error', () => {
+      emblemVideo.hidden = true;
+      emblemFallback.hidden = false;
+    });
+
+    if (emblemVideo.readyState >= 2) {
+      revealEmblemVideo();
+    }
+  </script>
 </body>
 </html>
