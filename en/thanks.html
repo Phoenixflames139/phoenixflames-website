@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danke | Phoenixflames</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="canonical" href="https://phoenixflames.de/en/thanks.html">
+  <link rel="alternate" hreflang="de" href="https://phoenixflames.de/thanks.html">
+  <link rel="alternate" hreflang="en" href="https://phoenixflames.de/en/thanks.html">
+  <link rel="alternate" hreflang="x-default" href="https://phoenixflames.de/thanks.html">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/en/" class="brand" aria-label="Phoenixflames home">
+      <img src="/LogoBird.png" alt="Phoenixflames Logo">
+    </a>
+
+    <div class="nav-controls"><div class="nav-links">
+      <a href="/en/shows.html">Fire Shows</a>
+      <a href="/en/workshops.html">Workshops</a>
+      <a href="/en/tools.html">Fire Tools</a>
+      <a href="/en/gallery.html">Gallery</a>
+      <a href="/en/booking.html">Booking</a>
+    </div>
+      <div class="language-switch" role="group" aria-label="Select language">
+        <a href="/thanks.html" lang="de" aria-label="Deutsch">DE</a>
+        <span aria-hidden="true">/</span>
+        <a href="/en/thanks.html" lang="en" class="selected" aria-current="true" aria-label="English">EN</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="thanks-main">
+    <section class="thanks-card">
+      <p class="eyebrow">Message received</p>
+      <h1>Thank you.</h1>
+
+      <div class="thanks-emblem" aria-label="Phoenixflames emblem animation">
+        <video
+          aria-label="Animated Phoenixflames emblem"
+          autoplay
+          muted
+          playsinline
+
+          preload="auto"
+          poster="/LogoKlein.jpg"
+          width="320"
+          height="320"
+        >
+          <source src="/Emblem.MP4?v=once-2" type="video/mp4">
+          Your browser does not support this video.
+          <a href="/en/Emblem.MP4">Open emblem video</a>
+        </video>
+      </div>
+
+      <p class="thanks-tagline">Your spark has reached us.</p>
+      <p>
+        Your message has been sent. We'll get back to you as soon as possible.
+      </p>
+
+      <a class="button button-primary" href="/en/">Back to Phoenixflames</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 Phoenixflames</span>
+      <nav class="footer-links" aria-label="More links">
+        <a href="https://www.instagram.com/1phoenixflames9/" target="_blank" rel="noopener noreferrer" aria-label="Visit Phoenixflames on Instagram (opens in new tab)">Instagram</a>
+        <a href="/en/impressum.html">Legal notice</a>
+        <a href="/en/datenschutz.html">Privacy policy</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script id="emblem-once-script">
+    // The original Phoenixflames emblem animation lasts 2.8667 seconds.
+    // In addition to disabling HTML looping, stop at the end of that
+    // first animation even if the uploaded file includes repetitions.
+    (() => {
+      const video = document.querySelector('.thanks-emblem video');
+      if (!video) return;
+      const firstAnimationSeconds = 2.8667;
+      const frameEpsilon = 0.035;
+      let finished = false;
+      video.loop = false;
+
+      const finishAtEndFrame = () => {
+        if (finished) return;
+        finished = true;
+        video.loop = false;
+        video.pause();
+        const actualDuration = Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : firstAnimationSeconds;
+        const finalTime = Math.max(0, Math.min(actualDuration, firstAnimationSeconds) - frameEpsilon);
+        try {
+          video.currentTime = finalTime;
+        } catch (_) {
+          // If seeking is unavailable, the browser keeps its last rendered frame.
+        }
+      };
+
+      video.addEventListener('ended', finishAtEndFrame);
+      video.addEventListener('timeupdate', () => {
+        const duration = Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : firstAnimationSeconds;
+        if (!finished && video.currentTime >= Math.min(duration, firstAnimationSeconds) - frameEpsilon) {
+          finishAtEndFrame();
+        }
+      });
+      video.addEventListener('play', () => {
+        if (finished) video.pause();
+      });
+    })();
+  </script>
+</body>
+</html>
