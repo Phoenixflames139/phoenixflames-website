@@ -119,6 +119,75 @@ a {
 }
 
 
+/* Language selector: shared across all German/English pages. */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.nav-controls .nav-links {
+  min-width: 0;
+}
+
+.language-switch {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+  color: #999;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.language-switch a {
+  padding: 5px 7px;
+  color: #aaa;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color .2s ease, background .2s ease;
+}
+
+.language-switch a:hover,
+.language-switch a:focus-visible {
+  color: var(--gold);
+  background: rgba(243, 179, 61, .08);
+}
+
+.language-switch a.selected {
+  color: var(--gold);
+  background: rgba(243, 179, 61, .12);
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+  .navbar { padding-inline: 14px; gap: 10px; }
+  .nav-controls { gap: 5px; }
+  .nav-links { gap: 2px; }
+  .nav-links a { padding: 7px 8px; font-size: .82rem; }
+}
+
+@media (max-width: 700px) {
+  .nav-controls {
+    width: 100%;
+    gap: 8px;
+  }
+  .nav-controls .nav-links {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+  .language-switch {
+    padding-left: 6px;
+    gap: 1px;
+    font-size: .78rem;
+  }
+  .language-switch a { padding: 6px 5px; }
+}
+
 /* ==================================================
    HOME HERO
 ================================================== */
