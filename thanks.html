@@ -40,7 +40,7 @@
           width="320"
           height="320"
         >
-          <source src="/Emblem.MP4" type="video/mp4">
+          <source src="/Emblem.MP4?v=once-2" type="video/mp4">
           Dein Browser unterstützt dieses Video nicht.
           <a href="/Emblem.MP4">Emblem-Video öffnen</a>
         </video>
@@ -66,5 +66,47 @@
     </div>
   </footer>
 
+  <script id="emblem-once-script">
+    // The original Phoenixflames emblem animation lasts 2.8667 seconds.
+    // In addition to disabling HTML looping, stop at the end of that
+    // first animation even if the uploaded file includes repetitions.
+    (() => {
+      const video = document.querySelector('.thanks-emblem video');
+      if (!video) return;
+      const firstAnimationSeconds = 2.8667;
+      const frameEpsilon = 0.035;
+      let finished = false;
+      video.loop = false;
+
+      const finishAtEndFrame = () => {
+        if (finished) return;
+        finished = true;
+        video.loop = false;
+        video.pause();
+        const actualDuration = Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : firstAnimationSeconds;
+        const finalTime = Math.max(0, Math.min(actualDuration, firstAnimationSeconds) - frameEpsilon);
+        try {
+          video.currentTime = finalTime;
+        } catch (_) {
+          // If seeking is unavailable, the browser keeps its last rendered frame.
+        }
+      };
+
+      video.addEventListener('ended', finishAtEndFrame);
+      video.addEventListener('timeupdate', () => {
+        const duration = Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration
+          : firstAnimationSeconds;
+        if (!finished && video.currentTime >= Math.min(duration, firstAnimationSeconds) - frameEpsilon) {
+          finishAtEndFrame();
+        }
+      });
+      video.addEventListener('play', () => {
+        if (finished) video.pause();
+      });
+    })();
+  </script>
 </body>
 </html>
