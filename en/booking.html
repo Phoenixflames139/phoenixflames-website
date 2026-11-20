@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking | Phoenixflames</title>
+  <meta name="description" content="Book Phoenixflames for Fire Shows, workshops or custom Fire Tools.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="canonical" href="https://phoenixflames.de/en/booking.html">
+  <link rel="alternate" hreflang="de" href="https://phoenixflames.de/booking.html">
+  <link rel="alternate" hreflang="en" href="https://phoenixflames.de/en/booking.html">
+  <link rel="alternate" hreflang="x-default" href="https://phoenixflames.de/booking.html">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/en/" class="brand" aria-label="Phoenixflames home">
+      <img src="/LogoBird.png" alt="Phoenixflames Logo">
+    </a>
+
+    <div class="nav-controls"><div class="nav-links">
+      <a href="/en/shows.html">Fire Shows</a>
+      <a href="/en/workshops.html">Workshops</a>
+      <a href="/en/tools.html">Fire Tools</a>
+      <a href="/en/gallery.html">Gallery</a>
+      <a href="/en/booking.html" class="active" aria-current="page">Booking</a>
+    </div>
+      <div class="language-switch" role="group" aria-label="Select language">
+        <a href="/booking.html" lang="de" aria-label="Deutsch">DE</a>
+        <span aria-hidden="true">/</span>
+        <a href="/en/booking.html" lang="en" class="selected" aria-current="true" aria-label="English">EN</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div>
+      <p class="eyebrow">Let's create something memorable</p>
+      <h1>Booking</h1>
+      <p>Fire Show, workshop or custom inquiry.</p>
+    </div>
+  </header>
+
+  <main class="page-main">
+
+    <section class="content-grid">
+      <article class="info-card">
+        <h3>Fire Shows</h3>
+        <p>For festivals, weddings, private celebrations, cultural events and special occasions.</p>
+      </article>
+
+      <article class="info-card">
+        <h3>Workshops</h3>
+        <p>Flow Arts workshops for festivals, communities, groups and events.</p>
+      </article>
+
+      <article class="info-card">
+        <h3>Fire Tools</h3>
+        <p>Inquiries about handmade props and custom builds.</p>
+      </article>
+    </section>
+
+    <section class="booking-section">
+      <div class="booking-copy">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Tell us about your idea.</h2>
+        <p>
+          The more we know about your event, the better we can suggest what is possible and which setup suits your vision.
+        </p>
+      </div>
+
+      <form
+        class="booking-form"
+        action="https://formsubmit.co/Phoenixflames@mail.de"
+        method="POST"
+      >
+        <input type="hidden" name="_subject" value="[Website EN] New Phoenixflames inquiry">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://phoenixflames.de/en/thanks.html">
+        <input type="hidden" name="_url" value="https://phoenixflames.de/en/booking.html">
+        <input
+          type="hidden"
+          name="_autoresponse"
+          value="Thank you for contacting Phoenixflames! We have received your message and will get back to you as soon as possible."
+        >
+
+        <input
+          type="text"
+          name="_honey"
+          class="honey-field"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        >
+
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label for="name">Name *</label>
+            <input
+              id="name"
+              name="Name"
+              type="text"
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="email">Email *</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Phone</label>
+            <input
+              id="phone"
+              name="Telefon"
+              type="tel"
+              autocomplete="tel"
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="request-type">Inquiry type *</label>
+            <select id="request-type" name="Anfrageart" required>
+              <option value="" selected disabled>Please select</option>
+              <option value="Fire Show">Fire Show</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Fire Tool">Fire Tool</option>
+              <option value="Collaboration">Collaboration</option>
+              <option value="Sonstiges">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="event-date">Event date</label>
+            <input
+              id="event-date"
+              name="Eventdatum"
+              type="date"
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="location">City / Venue</label>
+            <input
+              id="location"
+              name="Ort"
+              type="text"
+              autocomplete="address-level2"
+              placeholder="e.g. Munich"
+            >
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="budget">Budget / Price range</label>
+            <input
+              id="budget"
+              name="Budget"
+              type="text"
+              placeholder="Optional"
+            >
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="message">Tell us about your idea *</label>
+            <textarea
+              id="message"
+              name="Nachricht"
+              rows="7"
+              required
+              placeholder="Event, desired performance, number of guests, special requests ..."
+            ></textarea>
+          </div>
+
+          <div class="form-field form-field-full privacy-notice">
+            <p>
+              By submitting this form, you confirm that you have read our
+              <a href="/en/datenschutz.html" target="_blank" rel="noopener noreferrer">privacy policy</a>
+              .
+            </p>
+          </div>
+
+          <div class="form-field form-field-full">
+            <button class="button button-primary submit-button" type="submit">
+              Send inquiry
+            </button>
+          </div>
+
+        </div>
+
+        <p class="form-note">
+          * Required fields. A security check may appear when you submit the form for the first time.
+        </p>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 Phoenixflames</span>
+      <nav class="footer-links" aria-label="More links">
+        <a href="https://www.instagram.com/1phoenixflames9/" target="_blank" rel="noopener noreferrer" aria-label="Visit Phoenixflames on Instagram (opens in new tab)">Instagram</a>
+        <a href="/en/impressum.html">Legal notice</a>
+        <a href="/en/datenschutz.html">Privacy policy</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
