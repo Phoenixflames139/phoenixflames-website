@@ -148,10 +148,10 @@ html.pf-arriving.pf-ready::before { display: none; }
   animation-delay: var(--delay);
 }
 .pf-transition.pf-exiting .pf-curtain {
-  animation: pf-fire-cover .62s cubic-bezier(.16,.73,.31,1) both;
+  animation: pf-fire-cover .30s cubic-bezier(.16,.73,.31,1) both;
 }
 .pf-transition.pf-entering .pf-curtain {
-  animation: pf-fire-reveal .67s cubic-bezier(.55,.08,.65,1) both;
+  animation: pf-fire-reveal .34s cubic-bezier(.55,.08,.65,1) both;
 }
 @keyframes pf-fire-cover {
   from { transform: translate3d(0, 115%, 0); }
