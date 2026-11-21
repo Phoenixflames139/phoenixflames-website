@@ -111,7 +111,7 @@
           finishArrival();
         }
       });
-      setTimeout(finishArrival, 850);
+      setTimeout(finishArrival, 500);
     }
 
     let leaving = false;
@@ -162,7 +162,7 @@
           navigate();
         }
       });
-      setTimeout(navigate, 780);
+      setTimeout(navigate, 450);
     });
 
     // Restore a normal page when returning through the browser's back/forward cache.
