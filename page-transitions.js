@@ -1,14 +1,14 @@
-/* Phoenixflames | Paper burns into ash v4
+/* Phoenixflames | Paper burns into ash v5
    Unlike a moving overlay, the EXISTING page develops a real transparent hole.
-   A small ignition grows into a scorched, irregular burn ring with sparks.
+   The clicked link is the ignition point. A small ignition grows into a scorched, irregular burn ring with sparks.
    No third-party libraries; supports iPhone Safari, keyboard clicks and DE/EN. */
 (() => {
   'use strict';
 
-  const KEY = 'phoenixflames-paper-burn-v4';
+  const KEY = 'phoenixflames-paper-burn-v5';
   const ROOT = document.documentElement;
-  const BURN_MS = 1550;
-  const REVEAL_MS = 580;
+  const BURN_MS = 1250;
+  const REVEAL_MS = 430;
   const reduced = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
@@ -228,13 +228,13 @@
     ctx.globalAlpha = 1;
   }
 
-  function ignite(destination, url) {
+  function ignite(destination, url, ignition) {
     const { layer, canvas } = createLayer(themeFor(destination), 'burning');
     const drawing = setupCanvas(canvas);
     if (!drawing) { location.assign(url); return; }
     const sections = maskSections();
-    const cx = Math.round(drawing.w * .23);
-    const cy = Math.round(drawing.h * .88);
+    const cx = Math.round(Math.max(0, Math.min(drawing.w, ignition.x)));
+    const cy = Math.round(Math.max(0, Math.min(drawing.h, ignition.y)));
     const maxRadius = Math.max(
       Math.hypot(cx, cy), Math.hypot(drawing.w - cx, cy),
       Math.hypot(cx, drawing.h - cy),
@@ -318,10 +318,20 @@
         return; // A normal link remains usable if storage is disabled.
       }
 
+      // Mouse or touch: ignite where the link was pressed.
+      // Keyboard activation: use the center of the activated link.
+      const rect = anchor.getBoundingClientRect();
+      const pointerClick = event.detail > 0 &&
+        Number.isFinite(event.clientX) && Number.isFinite(event.clientY);
+      const ignition = {
+        x: pointerClick ? event.clientX : rect.left + rect.width / 2,
+        y: pointerClick ? event.clientY : rect.top + rect.height / 2
+      };
+
       event.preventDefault();
       leaving = true;
       try {
-        ignite(url.pathname, url.href);
+        ignite(url.pathname, url.href, ignition);
       } catch (_) {
         location.assign(url.href); // Never block a link on animation failure.
       }
