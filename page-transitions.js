@@ -1,37 +1,36 @@
-/* Phoenixflames | Fire transitions v1
-   Graceful multi-page navigation (DE/EN). No external libraries.
-   A small sessionStorage handoff keeps the curtain moving across full page loads.
-*/
+/* Phoenixflames | Burning-page transitions v3
+   A jagged clipping line actually removes the outgoing page while
+   embers and flame trace the edge. DE/EN + bfcache safe. No libraries. */
 (() => {
   'use strict';
 
-  const KEY = 'phoenixflames-fire-transition-v1';
+  const KEY = 'phoenixflames-burn-navigation-v3';
   const ROOT = document.documentElement;
-  const reducedMotion = window.matchMedia &&
+  const prefersReducedMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
-  const enabled = !reducedMotion && !saveData;
+  const enabled = !prefersReducedMotion && !saveData &&
+    typeof Element.prototype.animate === 'function';
 
   function readArrival() {
-    let state;
     try {
       const raw = sessionStorage.getItem(KEY);
       sessionStorage.removeItem(KEY);
       if (!raw) return null;
-      state = JSON.parse(raw);
+      const state = JSON.parse(raw);
+      if (!state || state.path !== location.pathname ||
+          !Number.isFinite(state.at) || Date.now() - state.at > 15000) {
+        return null;
+      }
+      return state;
     } catch (_) {
       return null;
     }
-    if (!state || state.path !== location.pathname ||
-        !Number.isFinite(state.at) || Date.now() - state.at > 15000) {
-      return null;
-    }
-    return state;
   }
 
-  function themeFor(pathname) {
-    const filename = pathname.split('/').filter(Boolean).pop() || 'index.html';
-    switch (filename) {
+  function themeFor(path) {
+    const file = path.split('/').filter(Boolean).pop() || 'index.html';
+    switch (file) {
       case 'shows.html': return 'shows';
       case 'workshops.html': return 'workshops';
       case 'tools.html': return 'tools';
@@ -44,74 +43,130 @@
     }
   }
 
-  const arrival = readArrival();
-  if (arrival && enabled) {
-    // Mark the arriving document in <head>, before the first body paint.
-    // CSS displays an opaque placeholder until the animated curtain is ready.
-    ROOT.classList.add('pf-arriving');
-  }
+  const arrival = enabled ? readArrival() : null;
+  if (arrival) ROOT.classList.add('pf-arriving');
 
-  function createCurtain(theme) {
+  function createBurnLayer(theme) {
     const layer = document.createElement('div');
     layer.className = 'pf-transition pf-theme-' + theme;
     layer.setAttribute('aria-hidden', 'true');
 
-    const curtain = document.createElement('div');
-    curtain.className = 'pf-curtain';
+    const shroud = document.createElement('div');
+    shroud.className = 'pf-burn-shroud';
+    layer.appendChild(shroud);
 
-    const edge = document.createElement('div');
-    edge.className = 'pf-edge';
-    curtain.appendChild(edge);
+    const front = document.createElement('div');
+    front.className = 'pf-burn-front';
 
-    // Irregular flames across the leading edge of the fire curtain.
-    const heights = [23, 31, 21, 35, 24, 30, 19, 34, 26, 32, 24];
+    // The leading edge has independent, asymmetric flame tongues.
+    const heights = [72, 114, 84, 138, 92, 122, 76, 141, 88, 130, 100, 116, 75];
     for (let i = 0; i < heights.length; i += 1) {
       const flame = document.createElement('span');
-      flame.className = 'pf-tongue';
-      flame.style.setProperty('--left', (i * 9.6 - 2) + '%');
-      flame.style.setProperty('--height', heights[i] + 'svh');
-      flame.style.setProperty('--angle', ((i % 2 ? -1 : 1) * (3 + i % 4)) + 'deg');
-      flame.style.setProperty('--delay', -(i % 5) * .11 + 's');
-      curtain.appendChild(flame);
+      flame.className = 'pf-flame';
+      flame.style.setProperty('--x', (i * 8.3 - 3) + '%');
+      flame.style.setProperty('--h', heights[i] + 'px');
+      flame.style.setProperty('--delay', (-i * .051) + 's');
+      front.appendChild(flame);
     }
-    layer.appendChild(curtain);
 
     const sparks = document.createElement('div');
-    sparks.className = 'pf-sparks';
-    for (let i = 0; i < 20; i += 1) {
+    sparks.className = 'pf-ash-sparks';
+    for (let i = 0; i < 26; i += 1) {
       const spark = document.createElement('i');
-      spark.style.setProperty('--x', ((i * 37 + 11) % 97) + '%');
-      spark.style.setProperty('--bottom', ((i * 29) % 34) + '%');
-      spark.style.setProperty('--s', (2 + i % 3) + 'px');
-      spark.style.setProperty('--t', (1.2 + (i % 6) * .25) + 's');
-      spark.style.setProperty('--delay', -((i * 7) % 18) / 10 + 's');
-      spark.style.setProperty('--dx', (((i * 11) % 61) - 30) + 'px');
+      spark.style.setProperty('--x', ((i * 41 + 7) % 100) + '%');
+      spark.style.setProperty('--y', ((i * 13) % 31 - 4) + 'px');
+      spark.style.setProperty('--s', (2 + i % 4) + 'px');
+      spark.style.setProperty('--t', (.42 + (i % 5) * .08) + 's');
+      spark.style.setProperty('--delay', (-(i * 7 % 13) / 20) + 's');
+      spark.style.setProperty('--dx', (((i * 17) % 85) - 42) + 'px');
       sparks.appendChild(spark);
     }
-    layer.appendChild(sparks);
+    front.appendChild(sparks);
+    layer.appendChild(front);
 
     document.body.appendChild(layer);
-    return layer;
+    return { layer, front };
+  }
+
+  let burnAnimations = [];
+  function resetAnimations() {
+    burnAnimations.forEach((animation) => {
+      try { animation.cancel(); } catch (_) {}
+    });
+    burnAnimations = [];
   }
 
   function clearTransition() {
+    resetAnimations();
     document.querySelectorAll('.pf-transition').forEach((el) => el.remove());
     ROOT.classList.remove('pf-arriving', 'pf-ready', 'pf-leaving');
   }
 
+  // Coordinates are expressed in the element's local box. Applying the same
+  // world-space edge to navbar, header, main and footer makes the actual
+  // visible HTML vanish behind a broken, jagged burn line.
+  const xStops = Array.from({ length: 26 }, (_, i) => i * 4);
+  const ragged = [13,-7,18,-14,22,-11,6,-21,16,-5,20,-16,9,-10,
+                  23,-8,11,-19,18,-6,10,-18,20,-9,13,-12];
+
+  function burnPolygon(rect, frontY) {
+    const points = ['0% 0px', '100% 0px'];
+    for (let i = xStops.length - 1; i >= 0; i -= 1) {
+      const y = Math.round(frontY + ragged[i] - rect.top);
+      points.push(xStops[i] + '% ' + y + 'px');
+    }
+    return 'polygon(' + points.join(', ') + ')';
+  }
+
+  function ignitePage(front, navigate) {
+    const height = window.innerHeight;
+    const begin = height + 170;
+    const end = -170;
+    const options = {
+      duration: 300,
+      easing: 'cubic-bezier(.16,.73,.31,1)',
+      fill: 'forwards'
+    };
+
+    // Only animate visible page sections; avoid altering scripts or the overlay.
+    const sections = Array.from(document.body.children).filter((node) => {
+      if (!node.matches || node.matches('script, style, .pf-transition')) return false;
+      const box = node.getBoundingClientRect();
+      return box.height > 0 && box.width > 0 &&
+        box.bottom > -90 && box.top < height + 90;
+    });
+
+    for (const section of sections) {
+      const rect = section.getBoundingClientRect();
+      const animation = section.animate([
+        { clipPath: burnPolygon(rect, begin) },
+        { clipPath: burnPolygon(rect, end) }
+      ], options);
+      burnAnimations.push(animation);
+    }
+
+    const fireAnimation = front.animate([
+      { transform: 'translate3d(0, ' + begin + 'px, 0)' },
+      { transform: 'translate3d(0, ' + end + 'px, 0)' }
+    ], options);
+    burnAnimations.push(fireAnimation);
+    fireAnimation.addEventListener('finish', navigate, { once: true });
+  }
+
   function initialize() {
-    if (arrival && enabled) {
-      const layer = createCurtain(themeFor(location.pathname));
+    if (arrival) {
+      const { layer } = createBurnLayer(themeFor(location.pathname));
       layer.classList.add('pf-entering');
       ROOT.classList.add('pf-ready');
+
       const finishArrival = () => clearTransition();
-      const panel = layer.querySelector('.pf-curtain');
-      panel.addEventListener('animationend', (event) => {
-        if (event.target === panel && event.animationName === 'pf-fire-reveal') {
+      const shroud = layer.querySelector('.pf-burn-shroud');
+      shroud.addEventListener('animationend', (event) => {
+        if (event.target === shroud && event.animationName === 'pf-ash-reveal') {
           finishArrival();
         }
       });
-      setTimeout(finishArrival, 500);
+      setTimeout(finishArrival, 490);
     }
 
     let leaving = false;
@@ -120,8 +175,8 @@
           event.button !== 0 || event.metaKey || event.ctrlKey ||
           event.shiftKey || event.altKey) return;
 
-      const target = event.target instanceof Element ? event.target : null;
-      const anchor = target && target.closest('a[href]');
+      const element = event.target instanceof Element ? event.target : null;
+      const anchor = element && element.closest('a[href]');
       if (!anchor || anchor.hasAttribute('download') ||
           anchor.hasAttribute('data-no-transition') ||
           (anchor.target && anchor.target !== '_self')) return;
@@ -130,7 +185,6 @@
       try { url = new URL(anchor.href, location.href); }
       catch (_) { return; }
 
-      // Let external URLs, hash jumps and same-page actions work normally.
       if (url.origin !== location.origin ||
           !['http:', 'https:'].includes(url.protocol) ||
           url.pathname === location.pathname) return;
@@ -141,12 +195,12 @@
           at: Date.now()
         }));
       } catch (_) {
-        return; // Without storage, use ordinary navigation.
+        return;
       }
 
       event.preventDefault();
       leaving = true;
-      const layer = createCurtain(themeFor(url.pathname));
+      const { layer, front } = createBurnLayer(themeFor(url.pathname));
       layer.classList.add('pf-exiting');
       ROOT.classList.add('pf-leaving');
 
@@ -156,16 +210,15 @@
         navigated = true;
         location.assign(url.href);
       };
-      const panel = layer.querySelector('.pf-curtain');
-      panel.addEventListener('animationend', (e) => {
-        if (e.target === panel && e.animationName === 'pf-fire-cover') {
-          navigate();
-        }
-      });
-      setTimeout(navigate, 450);
+
+      try {
+        ignitePage(front, navigate);
+      } catch (_) {
+        navigate(); // Never block navigation for an animation error.
+      }
+      setTimeout(navigate, 430);
     });
 
-    // Restore a normal page when returning through the browser's back/forward cache.
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) {
         leaving = false;
