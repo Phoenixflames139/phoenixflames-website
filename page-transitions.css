@@ -1,212 +1,82 @@
-/* Phoenixflames | Burning-page transitions v3
-   The departing page is physically clipped away by JavaScript.
-   Only a narrow fireline is painted: no opaque orange curtain. */
+/* Phoenixflames | Paper-burn page transitions v4
+   Ignite at the lower edge, char a growing hole in the ACTUAL outgoing page,
+   then reveal the next page through a thinning layer of ash.
+   The interactive masking and hand-drawn sparks are in page-transitions.js. */
+
 html.pf-arriving::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 2147483000;
-  background: #070505;
+  background: #090807;
   pointer-events: none;
 }
 html.pf-arriving.pf-ready::before { display: none; }
 
 .pf-transition {
-  --pf-outer: #b94518;
-  --pf-hot: #ff8b2a;
-  --pf-bright: #ffe0a0;
-  --pf-spark: #ffcc79;
+  --pf-hot: #ff7622;
+  --pf-gold: #ffdf91;
+  --pf-ember: #ffbd65;
   position: fixed;
   inset: 0;
   z-index: 2147483001;
-  pointer-events: none;
   overflow: hidden;
-  isolation: isolate;
   visibility: hidden;
+  pointer-events: none;
+  isolation: isolate;
 }
-.pf-transition.pf-entering,
-.pf-transition.pf-exiting { visibility: visible; }
+.pf-transition.pf-burning,
+.pf-transition.pf-entering { visibility: visible; }
+.pf-transition.pf-burning { pointer-events: auto; }
 
-.pf-theme-shows {
-  --pf-outer: #dc3e0d;
-  --pf-hot: #ff6e19;
-  --pf-bright: #fff0a8;
-  --pf-spark: #ffcf6f;
-}
-.pf-theme-workshops {
-  --pf-outer: #793a9a;
-  --pf-hot: #d47ab8;
-  --pf-bright: #b7c8ff;
-  --pf-spark: #b7d8ff;
-}
-.pf-theme-tools {
-  --pf-outer: #a9380c;
-  --pf-hot: #ff9e2b;
-  --pf-bright: #ffe89d;
-  --pf-spark: #ffd59a;
-}
-.pf-theme-gallery {
-  --pf-outer: #905021;
-  --pf-hot: #ebaa50;
-  --pf-bright: #ffe4a7;
-  --pf-spark: #ffdca0;
-}
-.pf-theme-booking, .pf-theme-thanks {
-  --pf-outer: #a25120;
-  --pf-hot: #edab4b;
-  --pf-bright: #ffe6ab;
-}
-.pf-theme-legal {
-  --pf-outer: #7f472b;
-  --pf-hot: #ca8850;
-  --pf-bright: #ecc49b;
+/* All destinations burn with natural orange fire; the glow varies subtly. */
+.pf-theme-workshops { --pf-ember: #d9b0ff; }
+.pf-theme-tools { --pf-ember: #ffd07a; }
+.pf-theme-gallery { --pf-ember: #ffe1a6; }
+.pf-theme-shows { --pf-ember: #ffae52; }
+
+.pf-burn-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-/* On arrival, the charred layer peels upwards and reveals the new page.
-   During departure it is absent, so the old page really disappears. */
-.pf-burn-shroud { display: none; }
-.pf-entering .pf-burn-shroud {
+/* The ash curtain is shown only on the arriving page, after the old
+   document has burned completely and the actual navigation has happened. */
+.pf-ash-veil { display: none; }
+.pf-entering .pf-ash-veil {
   display: block;
   position: absolute;
-  inset: -5svh -5vw;
+  inset: -2%;
   background:
-    radial-gradient(ellipse at 29% 35%, rgba(110,44,13,.17), transparent 39%),
-    radial-gradient(ellipse at 75% 78%, rgba(145,69,19,.11), transparent 46%),
-    repeating-radial-gradient(circle at 17% 44%, rgba(255,170,61,.045) 0 1px, transparent 2px 18px),
-    linear-gradient(135deg, #130a08 0%, #040404 75%);
-  box-shadow: inset 0 0 120px #000;
-  will-change: transform;
-  animation: pf-ash-reveal .34s cubic-bezier(.55,.08,.65,1) both;
+    radial-gradient(ellipse at 21% 88%, rgba(192, 80, 17, .35), transparent 32%),
+    radial-gradient(ellipse at 71% 41%, rgba(119, 56, 20, .14), transparent 43%),
+    repeating-radial-gradient(circle at 17% 74%, rgba(178, 92, 36, .045) 0px 1px, transparent 2px 18px),
+    linear-gradient(145deg, #1d120e, #070706 70%);
+  box-shadow: inset 0 0 130px #000;
+  animation: pf-ash-reveal .58s ease-out forwards;
+  will-change: opacity, transform;
 }
-
-.pf-burn-front {
-  position: absolute;
-  top: 0;
-  left: -4%;
-  width: 108%;
-  height: 0;
-  pointer-events: none;
-  will-change: transform;
-  transform: translate3d(0, 110svh, 0);
-}
-
-/* Smoke darkens the old page just before the jagged burn edge crosses it. */
-.pf-burn-front::before {
+.pf-entering .pf-ash-veil::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -12px;
-  height: clamp(65px, 16svh, 190px);
-  background:
-    radial-gradient(ellipse at 12% 90%, rgba(24,18,17,.8), transparent 60%),
-    radial-gradient(ellipse at 47% 78%, rgba(32,22,20,.83), transparent 60%),
-    radial-gradient(ellipse at 86% 93%, rgba(37,24,19,.7), transparent 55%),
-    linear-gradient(0deg, rgba(15,5,3,.54), transparent 80%);
-  filter: blur(20px);
-  opacity: .65;
-}
-
-/* Glowing, scorched fracture edge, not a broad sheet of orange. */
-.pf-burn-front::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -11px;
-  height: 47px;
-  background:
-    repeating-linear-gradient(94deg,
-      transparent 0 8px,
-      rgba(255,234,162,.64) 9px 10px,
-      rgba(255,123,31,.36) 11px 14px,
-      transparent 17px 27px),
-    linear-gradient(to top,
-      rgba(19,7,4,.85),
-      rgba(255,83,16,.74) 35%,
-      rgba(255,202,89,.65) 58%,
-      transparent 100%);
-  filter: blur(8px);
-  opacity: .84;
-  animation: pf-heat-flicker .11s ease-in-out infinite alternate;
-}
-
-.pf-flame {
-  position: absolute;
-  bottom: -4px;
-  left: var(--x);
-  width: clamp(54px, 13vw, 200px);
-  height: var(--h);
-  transform-origin: 50% 95%;
-  background: radial-gradient(ellipse at 50% 93%,
-      var(--pf-bright) 0%,
-      var(--pf-hot) 29%,
-      var(--pf-outer) 56%,
-      transparent 75%);
-  clip-path: polygon(0% 100%, 12% 69%, 21% 75%,
-      37% 26%, 47% 0%, 56% 42%, 70% 25%, 80% 63%,
-      94% 55%, 100% 100%);
-  filter: blur(4px);
-  opacity: .86;
-  mix-blend-mode: screen;
-  animation: pf-flame-flicker .23s ease-in-out infinite alternate;
-  animation-delay: var(--delay);
-}
-.pf-flame:nth-child(2n) { opacity: .70; filter: blur(6px); }
-
-.pf-ash-sparks {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0;
-}
-.pf-ash-sparks i {
-  position: absolute;
-  left: var(--x);
-  bottom: var(--y);
-  height: var(--s);
-  width: var(--s);
-  border-radius: 40%;
-  background: var(--pf-spark);
-  box-shadow: 0 0 7px 1px var(--pf-hot);
-  opacity: 0;
-  animation: pf-burn-spark var(--t) linear infinite;
-  animation-delay: var(--delay);
-}
-.pf-ash-sparks i:nth-child(3n) {
-  background: #8d6551;
-  box-shadow: none;
-  border-radius: 2px;
-}
-
-.pf-entering .pf-burn-front {
-  animation: pf-ash-front-reveal .34s cubic-bezier(.55,.08,.65,1) both;
+  inset: 0;
+  background: radial-gradient(ellipse at 21% 88%, rgba(255, 145, 45, .36), transparent 26%);
+  opacity: .8;
+  animation: pf-afterglow .58s ease-out forwards;
 }
 @keyframes pf-ash-reveal {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, -120svh, 0); }
+  0% { opacity: 1; transform: scale(1); }
+  60% { opacity: .74; }
+  100% { opacity: 0; transform: scale(1.035); }
 }
-@keyframes pf-ash-front-reveal {
-  from { transform: translate3d(0, 102svh, 0); }
-  to { transform: translate3d(0, -18svh, 0); }
+@keyframes pf-afterglow {
+  from { opacity: .8; }
+  to { opacity: 0; }
 }
-@keyframes pf-heat-flicker {
-  from { opacity: .6; filter: blur(7px); }
-  to { opacity: 1; filter: blur(10px); }
-}
-@keyframes pf-flame-flicker {
-  from { transform: rotate(-6deg) scale(.88, .89); }
-  to { transform: rotate(6deg) scale(1.04, 1.16); }
-}
-@keyframes pf-burn-spark {
-  0% { transform: translate3d(0, 20px, 0) rotate(0deg) scale(.7); opacity: 0; }
-  18% { opacity: .95; }
-  67% { opacity: .6; }
-  100% { transform: translate3d(var(--dx), -140px, 0) rotate(52deg) scale(.25); opacity: 0; }
-}
-
-/* No intercepted navigation or movement for people who request less motion. */
 @media (prefers-reduced-motion: reduce) {
-  .pf-transition, html.pf-arriving::before { display: none !important; }
+  .pf-transition,
+  html.pf-arriving::before { display: none !important; }
 }
