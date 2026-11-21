@@ -1,4 +1,4 @@
-/* Phoenixflames | Paper-burn page transitions v4
+/* Phoenixflames | Paper-burn page transitions v5
    Ignite at the lower edge, char a growing hole in the ACTUAL outgoing page,
    then reveal the next page through a thinning layer of ash.
    The interactive masking and hand-drawn sparks are in page-transitions.js. */
@@ -56,7 +56,7 @@ html.pf-arriving.pf-ready::before { display: none; }
     repeating-radial-gradient(circle at 17% 74%, rgba(178, 92, 36, .045) 0px 1px, transparent 2px 18px),
     linear-gradient(145deg, #1d120e, #070706 70%);
   box-shadow: inset 0 0 130px #000;
-  animation: pf-ash-reveal .58s ease-out forwards;
+  animation: pf-ash-reveal .43s ease-out forwards;
   will-change: opacity, transform;
 }
 .pf-entering .pf-ash-veil::after {
@@ -65,7 +65,7 @@ html.pf-arriving.pf-ready::before { display: none; }
   inset: 0;
   background: radial-gradient(ellipse at 21% 88%, rgba(255, 145, 45, .36), transparent 26%);
   opacity: .8;
-  animation: pf-afterglow .58s ease-out forwards;
+  animation: pf-afterglow .43s ease-out forwards;
 }
 @keyframes pf-ash-reveal {
   0% { opacity: 1; transform: scale(1); }
