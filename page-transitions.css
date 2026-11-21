@@ -1,181 +1,212 @@
-/* Phoenixflames | Cinematic page transitions v1
-   Theme is based on the DESTINATION page. CSS-only animated visual layer;
-   progressive enhancement, no external assets or libraries. */
+/* Phoenixflames | Burning-page transitions v3
+   The departing page is physically clipped away by JavaScript.
+   Only a narrow fireline is painted: no opaque orange curtain. */
 html.pf-arriving::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 2147483000;
-  background: #080403;
+  background: #070505;
   pointer-events: none;
 }
 html.pf-arriving.pf-ready::before { display: none; }
 
 .pf-transition {
-  --pf-outer: #bd4214;
-  --pf-hot: #ff9b3b;
-  --pf-bright: #ffdfa0;
-  --pf-spark: #ffd294;
+  --pf-outer: #b94518;
+  --pf-hot: #ff8b2a;
+  --pf-bright: #ffe0a0;
+  --pf-spark: #ffcc79;
   position: fixed;
   inset: 0;
   z-index: 2147483001;
-  overflow: hidden;
-  visibility: hidden;
   pointer-events: none;
+  overflow: hidden;
   isolation: isolate;
+  visibility: hidden;
 }
 .pf-transition.pf-entering,
-.pf-transition.pf-exiting {
-  visibility: visible;
-  pointer-events: auto;
-}
+.pf-transition.pf-exiting { visibility: visible; }
 
-/* Fire Shows: fiery and dramatic. */
 .pf-theme-shows {
-  --pf-outer: #cb3410;
-  --pf-hot: #ff7a19;
-  --pf-bright: #ffe095;
-  --pf-spark: #ffce70;
+  --pf-outer: #dc3e0d;
+  --pf-hot: #ff6e19;
+  --pf-bright: #fff0a8;
+  --pf-spark: #ffcf6f;
 }
-/* Workshops: Flow Arts' cool-and-warm light trails. */
 .pf-theme-workshops {
-  --pf-outer: #652b7d;
-  --pf-hot: #d36bba;
-  --pf-bright: #b3baff;
-  --pf-spark: #9dcfff;
+  --pf-outer: #793a9a;
+  --pf-hot: #d47ab8;
+  --pf-bright: #b7c8ff;
+  --pf-spark: #b7d8ff;
 }
-/* Fire Tools: forge, heated metal and sparks. */
 .pf-theme-tools {
-  --pf-outer: #9b3010;
-  --pf-hot: #ffaf35;
-  --pf-bright: #fff0ae;
-  --pf-spark: #ffdb88;
+  --pf-outer: #a9380c;
+  --pf-hot: #ff9e2b;
+  --pf-bright: #ffe89d;
+  --pf-spark: #ffd59a;
 }
-/* Gallery: softer golden embers. */
 .pf-theme-gallery {
-  --pf-outer: #784014;
-  --pf-hot: #dfa24d;
-  --pf-bright: #f6d7a0;
-  --pf-spark: #f5d49a;
+  --pf-outer: #905021;
+  --pf-hot: #ebaa50;
+  --pf-bright: #ffe4a7;
+  --pf-spark: #ffdca0;
 }
-.pf-theme-booking,
-.pf-theme-thanks {
-  --pf-outer: #914112;
-  --pf-hot: #efaa4a;
-  --pf-bright: #ffe6a7;
+.pf-theme-booking, .pf-theme-thanks {
+  --pf-outer: #a25120;
+  --pf-hot: #edab4b;
+  --pf-bright: #ffe6ab;
 }
 .pf-theme-legal {
-  --pf-outer: #6a3416;
-  --pf-hot: #bf8045;
-  --pf-bright: #e6b989;
+  --pf-outer: #7f472b;
+  --pf-hot: #ca8850;
+  --pf-bright: #ecc49b;
 }
 
-.pf-curtain {
+/* On arrival, the charred layer peels upwards and reveals the new page.
+   During departure it is absent, so the old page really disappears. */
+.pf-burn-shroud { display: none; }
+.pf-entering .pf-burn-shroud {
+  display: block;
   position: absolute;
-  top: -18svh;
-  left: -5%;
-  width: 110%;
-  height: 137svh;
-  transform: translate3d(0, 115%, 0);
+  inset: -5svh -5vw;
+  background:
+    radial-gradient(ellipse at 29% 35%, rgba(110,44,13,.17), transparent 39%),
+    radial-gradient(ellipse at 75% 78%, rgba(145,69,19,.11), transparent 46%),
+    repeating-radial-gradient(circle at 17% 44%, rgba(255,170,61,.045) 0 1px, transparent 2px 18px),
+    linear-gradient(135deg, #130a08 0%, #040404 75%);
+  box-shadow: inset 0 0 120px #000;
   will-change: transform;
-  background:
-    radial-gradient(ellipse at 50% 1%, var(--pf-bright), transparent 12%),
-    linear-gradient(
-      to bottom,
-      var(--pf-hot) 0%,
-      var(--pf-outer) 11%,
-      #38170d 27%,
-      #100806 46%,
-      #050505 75%
-    );
-  box-shadow: 0 -30px 85px 20px rgba(252, 106, 28, .28);
+  animation: pf-ash-reveal .34s cubic-bezier(.55,.08,.65,1) both;
 }
 
-.pf-edge {
+.pf-burn-front {
   position: absolute;
-  top: -11svh;
+  top: 0;
+  left: -4%;
+  width: 108%;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0, 110svh, 0);
+}
+
+/* Smoke darkens the old page just before the jagged burn edge crosses it. */
+.pf-burn-front::before {
+  content: "";
+  position: absolute;
   left: 0;
-  width: 100%;
-  height: 24svh;
-  opacity: .96;
+  right: 0;
+  bottom: -12px;
+  height: clamp(65px, 16svh, 190px);
   background:
-    radial-gradient(ellipse 7% 76% at 3% 100%, var(--pf-bright) 25%, transparent 72%),
-    radial-gradient(ellipse 10% 98% at 12% 100%, var(--pf-hot) 25%, transparent 70%),
-    radial-gradient(ellipse 6% 61% at 23% 100%, var(--pf-bright) 20%, transparent 78%),
-    radial-gradient(ellipse 8% 95% at 34% 100%, var(--pf-hot) 25%, transparent 73%),
-    radial-gradient(ellipse 9% 65% at 46% 100%, var(--pf-bright) 22%, transparent 75%),
-    radial-gradient(ellipse 8% 100% at 56% 100%, var(--pf-hot) 22%, transparent 72%),
-    radial-gradient(ellipse 7% 67% at 68% 100%, var(--pf-bright) 22%, transparent 76%),
-    radial-gradient(ellipse 10% 96% at 80% 100%, var(--pf-hot) 20%, transparent 73%),
-    radial-gradient(ellipse 8% 70% at 91% 100%, var(--pf-bright) 24%, transparent 76%);
-  filter: blur(5px);
-  animation: pf-flame-flicker .34s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 12% 90%, rgba(24,18,17,.8), transparent 60%),
+    radial-gradient(ellipse at 47% 78%, rgba(32,22,20,.83), transparent 60%),
+    radial-gradient(ellipse at 86% 93%, rgba(37,24,19,.7), transparent 55%),
+    linear-gradient(0deg, rgba(15,5,3,.54), transparent 80%);
+  filter: blur(20px);
+  opacity: .65;
 }
 
-.pf-tongue {
+/* Glowing, scorched fracture edge, not a broad sheet of orange. */
+.pf-burn-front::after {
+  content: "";
   position: absolute;
-  top: -12svh;
-  left: var(--left);
-  width: clamp(45px, 13vw, 230px);
-  height: var(--height);
-  border-radius: 45% 65% 48% 52% / 85% 85% 35% 35%;
-  transform: rotate(var(--angle));
-  transform-origin: center bottom;
-  background: radial-gradient(ellipse at 50% 100%, var(--pf-bright) 0%, var(--pf-hot) 36%, var(--pf-outer) 73%, transparent 79%);
-  opacity: .83;
+  left: 0;
+  right: 0;
+  bottom: -11px;
+  height: 47px;
+  background:
+    repeating-linear-gradient(94deg,
+      transparent 0 8px,
+      rgba(255,234,162,.64) 9px 10px,
+      rgba(255,123,31,.36) 11px 14px,
+      transparent 17px 27px),
+    linear-gradient(to top,
+      rgba(19,7,4,.85),
+      rgba(255,83,16,.74) 35%,
+      rgba(255,202,89,.65) 58%,
+      transparent 100%);
+  filter: blur(8px);
+  opacity: .84;
+  animation: pf-heat-flicker .11s ease-in-out infinite alternate;
+}
+
+.pf-flame {
+  position: absolute;
+  bottom: -4px;
+  left: var(--x);
+  width: clamp(54px, 13vw, 200px);
+  height: var(--h);
+  transform-origin: 50% 95%;
+  background: radial-gradient(ellipse at 50% 93%,
+      var(--pf-bright) 0%,
+      var(--pf-hot) 29%,
+      var(--pf-outer) 56%,
+      transparent 75%);
+  clip-path: polygon(0% 100%, 12% 69%, 21% 75%,
+      37% 26%, 47% 0%, 56% 42%, 70% 25%, 80% 63%,
+      94% 55%, 100% 100%);
   filter: blur(4px);
-  animation: pf-tongue-dance .45s ease-in-out infinite alternate;
+  opacity: .86;
+  mix-blend-mode: screen;
+  animation: pf-flame-flicker .23s ease-in-out infinite alternate;
   animation-delay: var(--delay);
 }
-.pf-tongue:nth-of-type(2n) { opacity: .67; filter: blur(7px); }
+.pf-flame:nth-child(2n) { opacity: .70; filter: blur(6px); }
 
-.pf-sparks {
+.pf-ash-sparks {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
 }
-.pf-sparks i {
+.pf-ash-sparks i {
   position: absolute;
   left: var(--x);
-  bottom: var(--bottom);
-  width: var(--s);
+  bottom: var(--y);
   height: var(--s);
-  border-radius: 50%;
+  width: var(--s);
+  border-radius: 40%;
   background: var(--pf-spark);
-  opacity: .7;
-  box-shadow: 0 0 8px 2px var(--pf-hot);
-  animation: pf-spark-rise var(--t) linear infinite;
+  box-shadow: 0 0 7px 1px var(--pf-hot);
+  opacity: 0;
+  animation: pf-burn-spark var(--t) linear infinite;
   animation-delay: var(--delay);
 }
-.pf-transition.pf-exiting .pf-curtain {
-  animation: pf-fire-cover .30s cubic-bezier(.16,.73,.31,1) both;
+.pf-ash-sparks i:nth-child(3n) {
+  background: #8d6551;
+  box-shadow: none;
+  border-radius: 2px;
 }
-.pf-transition.pf-entering .pf-curtain {
-  animation: pf-fire-reveal .34s cubic-bezier(.55,.08,.65,1) both;
+
+.pf-entering .pf-burn-front {
+  animation: pf-ash-front-reveal .34s cubic-bezier(.55,.08,.65,1) both;
 }
-@keyframes pf-fire-cover {
-  from { transform: translate3d(0, 115%, 0); }
-  to   { transform: translate3d(0, 0, 0); }
-}
-@keyframes pf-fire-reveal {
+@keyframes pf-ash-reveal {
   from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, -115%, 0); }
+  to { transform: translate3d(0, -120svh, 0); }
+}
+@keyframes pf-ash-front-reveal {
+  from { transform: translate3d(0, 102svh, 0); }
+  to { transform: translate3d(0, -18svh, 0); }
+}
+@keyframes pf-heat-flicker {
+  from { opacity: .6; filter: blur(7px); }
+  to { opacity: 1; filter: blur(10px); }
 }
 @keyframes pf-flame-flicker {
-  from { opacity: .78; transform: translate3d(-1%, 1%, 0) scaleY(.95); }
-  to   { opacity: 1; transform: translate3d(1%, -1%, 0) scaleY(1.04); }
+  from { transform: rotate(-6deg) scale(.88, .89); }
+  to { transform: rotate(6deg) scale(1.04, 1.16); }
 }
-@keyframes pf-tongue-dance {
-  from { transform: rotate(calc(var(--angle) - 4deg)) scaleY(.9); }
-  to   { transform: rotate(calc(var(--angle) + 5deg)) scaleY(1.10); }
+@keyframes pf-burn-spark {
+  0% { transform: translate3d(0, 20px, 0) rotate(0deg) scale(.7); opacity: 0; }
+  18% { opacity: .95; }
+  67% { opacity: .6; }
+  100% { transform: translate3d(var(--dx), -140px, 0) rotate(52deg) scale(.25); opacity: 0; }
 }
-@keyframes pf-spark-rise {
-  from { transform: translate3d(0, 18px, 0) scale(.7); opacity: 0; }
-  16% { opacity: .78; }
-  75% { opacity: .45; }
-  to { transform: translate3d(var(--dx), -68svh, 0) scale(.16); opacity: 0; }
-}
+
+/* No intercepted navigation or movement for people who request less motion. */
 @media (prefers-reduced-motion: reduce) {
-  .pf-transition,
-  html.pf-arriving::before { display: none !important; }
+  .pf-transition, html.pf-arriving::before { display: none !important; }
 }
