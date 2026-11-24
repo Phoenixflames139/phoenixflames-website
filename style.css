@@ -1699,3 +1699,37 @@ footer {
 
   .navbar .nav-links a { font-size: .74rem; padding: 6px 2px; }
 }
+
+
+/* PHOENIXFLAMES ABOUT HERO TEAM ART
+   Preserve the complete portrait artwork, rather than cropping it to a
+   landscape background. Keep the existing hero if the image is absent. */
+.about-hero .about-hero-art[hidden] { display: none !important; }
+.about-hero:has(.about-hero-art:not([hidden])) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 86px);
+  padding: calc(var(--nav-height) + 36px) max(24px, calc((100vw - 1140px) / 2)) 54px;
+  min-height: 0;
+}
+.about-hero .about-hero-art {
+  display: block;
+  width: min(100%, 430px);
+  height: auto;
+  justify-self: center;
+  border: 1px solid rgba(243,179,61,.25);
+  border-radius: 12px;
+  box-shadow: 0 18px 65px rgba(0,0,0,.42);
+}
+@media (max-width: 700px) {
+  .about-hero:has(.about-hero-art:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr);
+    padding: calc(var(--nav-height) + 22px) 18px 38px;
+    gap: 26px;
+  }
+  .about-hero .about-hero-art {
+    grid-row: 1;
+    width: min(100%, 430px);
+  }
+}
