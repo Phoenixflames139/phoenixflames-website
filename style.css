@@ -1733,3 +1733,34 @@ footer {
     width: min(100%, 430px);
   }
 }
+
+
+/* PHOENIXFLAMES WORKSHOP HERO LOGO
+   Keep the entire gold phoenix and wordmark visible at every screen size. */
+.page-hero.workshops-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  min-height: 0;
+  padding: calc(var(--nav-height) + 24px) max(24px, calc((100vw - 1140px) / 2)) 48px;
+  background: #000;
+}
+.workshops-hero .workshops-hero-logo {
+  display: block;
+  width: min(100%, 510px);
+  height: auto;
+  justify-self: center;
+  object-fit: contain;
+}
+@media (max-width: 700px) {
+  .page-hero.workshops-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: calc(var(--nav-height) + 12px) 18px 38px;
+  }
+  .workshops-hero .workshops-hero-logo {
+    grid-row: 1;
+    width: min(100%, 390px);
+  }
+}
