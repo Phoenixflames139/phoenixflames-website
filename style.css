@@ -1764,3 +1764,8 @@ footer {
     width: min(100%, 390px);
   }
 }
+
+/* Keep the fifth landing-page card balanced across both columns. */
+.card-grid .feature-card-about {
+  grid-column: 1 / -1;
+}
