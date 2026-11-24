@@ -7,8 +7,8 @@
 
   const KEY = 'phoenixflames-paper-burn-v5';
   const ROOT = document.documentElement;
-  const BURN_MS = 1250;
-  const REVEAL_MS = 430;
+  const BURN_MS = 1000;
+  const REVEAL_MS = 330;
   const reduced = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
