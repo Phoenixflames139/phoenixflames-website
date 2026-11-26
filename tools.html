@@ -12,6 +12,8 @@
   <link rel="alternate" hreflang="x-default" href="https://phoenixflames.de/tools.html">
   <link rel="stylesheet" href="/page-transitions.css?v=6">
   <script src="/page-transitions.js?v=6"></script>
+  <link rel="stylesheet" href="/staff-configurator.css?v=1">
+  <script defer src="/staff-configurator.js?v=1"></script>
 </head>
 <body>
 
@@ -45,6 +47,62 @@
   </header>
 
   <main class="page-main">
+    <section class="staff-studio" data-staff-studio aria-labelledby="staff-title">
+      <div class="staff-intro">
+        <p class="eyebrow">Phoenixflames · Fire Tools</p>
+        <h2 id="staff-title">Contact Staff</h2>
+        <p>Ein Tool, dein Flow. Entdecke den Standardentwurf oder gestalte deinen individuellen Contact Staff.</p>
+        <p class="staff-demo-note">Konfigurator in Entwicklung: Maße, Ausführungen und Modell dienen der unverbindlichen Vorschau. Die endgültige Ausführung und der Preis werden persönlich abgestimmt.</p>
+      </div>
+      <div class="staff-layout">
+        <div class="staff-preview">
+          <div class="staff-preview-top"><strong>Contact Staff</strong><span data-view-label>Gesamtansicht</span></div>
+          <svg class="staff-model" viewBox="0 0 900 300" role="img" aria-label="Schematische, interaktive Contact-Staff-Vorschau" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="staff-metal" x2="0" y2="1"><stop stop-color="#6b6d70"/><stop offset=".25" stop-color="#e0e0e0"/><stop offset=".55" stop-color="#9b9b9b"/><stop offset="1" stop-color="#343434"/></linearGradient>
+              <linearGradient id="staff-grip" x2="0" y2="1"><stop data-part="gripColor" stop-color="#777a7b"/><stop offset=".55" data-part="gripDark" stop-color="#252729"/><stop offset="1" stop-color="#151515"/></linearGradient>
+              <linearGradient id="staff-wick" x2="0" y2="1"><stop stop-color="#d0bd85"/><stop offset=".5" stop-color="#ac9664"/><stop offset="1" stop-color="#695537"/></linearGradient>
+              <pattern id="staff-woven" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0 L8 8 M-4 4 L4 12 M4 -4 L12 4" stroke="#f4e3b5" opacity=".35" stroke-width="1"/><path d="M0 8 L8 0" stroke="#463c28" opacity=".48" stroke-width="1"/></pattern>
+              <pattern id="staff-grip-pattern" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0 L6 6" stroke="#fff" opacity=".13" stroke-width="1.2"/></pattern>
+            </defs>
+            <g opacity=".18" stroke="#a88a53" stroke-width="1"><path d="M0 100H900 M0 200H900 M150 0V300 M300 0V300 M450 0V300 M600 0V300 M750 0V300"/></g>
+            <rect data-part="shaft" x="105" y="143" width="690" height="14" rx="7" fill="url(#staff-metal)" stroke="#d4d4d4" stroke-width=".5"/>
+            <rect data-part="grip" x="284" y="139.5" width="332" height="21" rx="10.5" fill="url(#staff-grip)" stroke="#888" stroke-width=".6"/>
+            <rect data-part="gripTexture" x="284" y="139.5" width="332" height="21" rx="10.5" fill="url(#staff-grip-pattern)"/>
+            <g stroke="#c6a567" stroke-width=".7"><rect data-part="leftwick" x="105" y="125.5" width="74" height="49" rx="5" fill="url(#staff-wick)"/><rect data-part="rightwick" x="721" y="125.5" width="74" height="49" rx="5" fill="url(#staff-wick)"/></g>
+            <rect data-part="lefttexture" x="105" y="125.5" width="74" height="49" rx="5" fill="url(#staff-woven)"/><rect data-part="righttexture" x="721" y="125.5" width="74" height="49" rx="5" fill="url(#staff-woven)"/>
+            <g stroke="#b89960" opacity=".6" stroke-width="1"><line data-part="measure" x1="105" y1="224" x2="795" y2="224"/><line data-part="tickL" x1="105" y1="217" x2="105" y2="231"/><line data-part="tickR" x1="795" y1="217" x2="795" y2="231"/></g>
+            <text data-part="dimension" x="450" y="248" text-anchor="middle" fill="#d5bc8a" font-size="16" font-family="Arial,sans-serif">150 cm</text>
+          </svg>
+          <div class="staff-view-buttons" aria-label="Modellansicht">
+            <button type="button" data-staff-view="full" aria-pressed="true">Gesamt</button>
+            <button type="button" data-staff-view="diameter" aria-pressed="false">Durchmesser</button>
+            <button type="button" data-staff-view="grip" aria-pressed="false">Grip</button>
+            <button type="button" data-staff-view="wick" aria-pressed="false">Wick</button>
+          </div>
+          <dl class="staff-summary" aria-live="polite">
+            <div><dt>Stablänge</dt><dd data-summary="length">150 cm</dd></div>
+            <div><dt>Durchmesser</dt><dd data-summary="diameter">25 mm</dd></div>
+            <div><dt>Grip</dt><dd data-summary="grip">Schwarz</dd></div>
+            <div><dt>Wick</dt><dd data-summary="wick">Mittel</dd></div>
+          </dl>
+        </div>
+        <div class="staff-controls">
+          <h3>Dein Contact Staff</h3>
+          <p>Wähle die Details deines individuellen Tools.</p>
+          <div class="staff-standard"><strong data-model-label>Standardentwurf</strong><button class="staff-reset" type="button">Standard zurücksetzen</button></div>
+          <div class="staff-field"><label for="staff-length">Stablänge</label><select id="staff-length" data-staff-option="length" aria-describedby="hint-length"></select><small id="hint-length">Ändert die Gesamtlänge im Modell.</small></div>
+          <div class="staff-field"><label for="staff-diameter">Durchmesser</label><select id="staff-diameter" data-staff-option="diameter" aria-describedby="hint-diameter"></select><small id="hint-diameter">Die Vorschau fokussiert den Stab.</small></div>
+          <div class="staff-field"><label for="staff-grip">Grip</label><select id="staff-grip" data-staff-option="grip" aria-describedby="hint-grip"></select><small id="hint-grip">Wähle eine beispielhafte Grip-Farbe.</small></div>
+          <div class="staff-field"><label for="staff-wick">Wick</label><select id="staff-wick" data-staff-option="wick" aria-describedby="hint-wick"></select><small id="hint-wick">Wähle eine beispielhafte Wick-Ausführung.</small></div>
+          <div class="staff-price"><span>Preis</span><strong data-price>Auf Anfrage</strong></div>
+          <a class="button button-primary staff-request" href="/booking.html" aria-disabled="true">Konfiguration anfragen</a>
+          <p class="staff-request-note">Unverbindlich. Keine Bestellung oder Zahlung.</p>
+        </div>
+      </div>
+      <noscript><p class="staff-noscript">Für die interaktive Vorschau ist JavaScript erforderlich. Du kannst uns alternativ über Booking kontaktieren.</p></noscript>
+    </section>
+
     <section class="content-grid">
       <article class="info-card">
         <h3>Balanced</h3>
@@ -62,13 +120,7 @@
       </article>
     </section>
 
-    <section class="content-block">
-      <h2>Fire Shop</h2>
-      <p>
-        Unser Fire Shop befindet sich im Aufbau. Weitere Phoenixflames Tools und
-        individuelle Anfragen werden hier nach und nach ergänzt.
-      </p>
-    </section>
+    
 
     <section class="cta-section">
       <h2>Looking for a custom tool?</h2>
