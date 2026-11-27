@@ -74,38 +74,13 @@
     controls[key].value=values[key];
   }
   function attrs(node, object){for(const [k,v] of Object.entries(object))node.setAttribute(k,String(v));}
-  // Stylized illustrations only, not a technical knot or construction diagram.
+  // Original, illustrative SVG product assets; exact handmade knot geometry is not implied.
+  const wickAsset = kind => '/assets/wicks/'+kind+'.svg?v=1';
   function wickArt(kind){
-    const base=(rx=8)=>'<rect x="1" y="1" width="98" height="58" rx="'+rx+'" fill="url(#staff-wick)" stroke="#d0b782" stroke-width="1"/>';
-    const rope=(d,w=12)=>'<path d="'+d+'" fill="none" stroke="#55452c" stroke-width="'+(w+2)+'" stroke-linecap="round" stroke-linejoin="round"/><path d="'+d+'" fill="none" stroke="url(#staff-wick)" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/><path d="'+d+'" fill="none" stroke="#f0d7a2" stroke-width=".7" opacity=".65" stroke-linecap="round"/>';
-    if(kind==='sushi-roll')return base(5)+'<rect x="2" y="2" width="96" height="56" rx="4" fill="url(#staff-woven)" opacity=".8"/><path d="M5 8H95 M5 52H95" stroke="#e1c591" opacity=".55" fill="none"/>';
-    if(kind==='monkey-fist'){
-      let art='<ellipse cx="50" cy="30" rx="48" ry="28" fill="url(#staff-wick)" stroke="#d0b782"/>';
-      for(let i=0;i<4;i++){const y=12+i*11;art+=rope('M12 '+y+' Q50 '+(y-12)+' 88 '+y,10);}
-      for(let i=0;i<3;i++){const x=37+i*13;art+=rope('M'+x+' 7 Q'+(x+10)+' 30 '+x+' 53',10);}
-      return art;
-    }
-    if(kind==='dna-rapture'){
-      let art=base(13);
-      for(let i=0;i<3;i++){
-        const x=5+i*30;
-        art+=rope('M'+x+' 15 C'+(x+10)+' 15 '+(x+20)+' 45 '+(x+30)+' 45',12);
-        art+=rope('M'+x+' 45 C'+(x+10)+' 45 '+(x+20)+' 15 '+(x+30)+' 15',12);
-      }
-      return art;
-    }
-    let art=base(9),n=kind==='two-beat-isis'?4:6;
-    for(let i=0;i<n;i++){
-      const x=4+i*92/n,step=92/n;
-      if(kind==='two-beat-isis'){
-        art+=rope('M'+x+' 7 L'+(x+step*.85)+' 30 L'+x+' 53',10);
-        art+=rope('M'+(x+step*.85)+' 7 L'+x+' 30 L'+(x+step*.85)+' 53',10);
-      }else{
-        art+=rope('M'+x+' 8 Q'+(x+step)+' 8 '+(x+step)+' 22 L'+x+' 38 Q'+x+' 52 '+(x+step)+' 52',9);
-      }
-    }
-    return art;
+    return '<image href="'+wickAsset(kind)+'" width="100" height="60" preserveAspectRatio="none"/>';
   }
+  // Preload all variants so changing models does not flash a blank wick.
+  for(const entry of catalogue.options.wick){const img=new Image();img.src=wickAsset(entry.value);}
   function renderModel(){
     const length=Number(values.length), diameter=Number(values.diameter);
     const grip=option('grip',values.grip),wick=option('wick',values.wick);
@@ -132,7 +107,7 @@
   }
   function targetCamera(){
     if(view==='grip'){const w=Math.max(300,geometry.gripWidth+85);return [450-w/2,150-w/6,w,w/3];}
-    if(view==='wick'){const w=Math.max(240,geometry.gh*3.8,geometry.gw+65);const cx=geometry.x2-geometry.gw/2;return [cx-w/2,150-w/6,w,w/3];}
+    if(view==='wick'){const w=Math.max(200,geometry.gh*3.5,geometry.gw+65);const cx=geometry.x2-geometry.gw/2;return [cx-w/2,150-w/6,w,w/3];}
     if(view==='diameter'){const w=240;const cx=geometry.x1+geometry.width*.15;return [cx-w/2,150-w/6,w,w/3];}
     const w=Math.max(900,geometry.width+110);return [450-w/2,150-w/6,w,w/3];
   }
