@@ -7,7 +7,7 @@
   const T = (g,e) => de ? g : e;
   const catalogue = {
     basePrice: null,
-    standard: { length: '150', diameter: '25', grip: 'black', wick: 'medium' },
+    standard: { length: '150', diameter: '25', grip: 'black', wick: 'sushi-roll' },
     options: {
       length: ['140','150','160','170','180'].map(value => ({value, label:value+' cm', surcharge:null})),
       diameter: ['22','25','28'].map(value => ({value, label:value+' mm', surcharge:null})),
@@ -17,9 +17,11 @@
         {value:'brown',label:T('Braun','Brown'),color:'#765039',highlight:'#c49768',surcharge:null}
       ],
       wick: [
-        {value:'compact',label:T('Kompakt','Compact'),visualWidth:54,visualHeight:39,surcharge:null},
-        {value:'medium',label:T('Mittel','Medium'),visualWidth:74,visualHeight:49,surcharge:null},
-        {value:'wide',label:T('Breit','Wide'),visualWidth:98,visualHeight:59,surcharge:null}
+        {value:'two-beat-isis',label:'Two Beat Isis',visualWidth:76,visualHeight:48,surcharge:null},
+        {value:'three-beat-crown-sinnet',label:'Three Beat Crown Sinnet',visualWidth:84,visualHeight:56,surcharge:null},
+        {value:'dna-rapture',label:'DNA Rapture',visualWidth:94,visualHeight:48,surcharge:null},
+        {value:'monkey-fist',label:'Monkey Fist',visualWidth:58,visualHeight:58,surcharge:null},
+        {value:'sushi-roll',label:'Sushi Roll',visualWidth:74,visualHeight:49,surcharge:null}
       ]
     }
   };
@@ -72,6 +74,38 @@
     controls[key].value=values[key];
   }
   function attrs(node, object){for(const [k,v] of Object.entries(object))node.setAttribute(k,String(v));}
+  // Stylized illustrations only, not a technical knot or construction diagram.
+  function wickArt(kind){
+    const base=(rx=8)=>'<rect x="1" y="1" width="98" height="58" rx="'+rx+'" fill="url(#staff-wick)" stroke="#d0b782" stroke-width="1"/>';
+    const rope=(d,w=12)=>'<path d="'+d+'" fill="none" stroke="#55452c" stroke-width="'+(w+2)+'" stroke-linecap="round" stroke-linejoin="round"/><path d="'+d+'" fill="none" stroke="url(#staff-wick)" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/><path d="'+d+'" fill="none" stroke="#f0d7a2" stroke-width=".7" opacity=".65" stroke-linecap="round"/>';
+    if(kind==='sushi-roll')return base(5)+'<rect x="2" y="2" width="96" height="56" rx="4" fill="url(#staff-woven)" opacity=".8"/><path d="M5 8H95 M5 52H95" stroke="#e1c591" opacity=".55" fill="none"/>';
+    if(kind==='monkey-fist'){
+      let art='<ellipse cx="50" cy="30" rx="48" ry="28" fill="url(#staff-wick)" stroke="#d0b782"/>';
+      for(let i=0;i<4;i++){const y=12+i*11;art+=rope('M12 '+y+' Q50 '+(y-12)+' 88 '+y,10);}
+      for(let i=0;i<3;i++){const x=37+i*13;art+=rope('M'+x+' 7 Q'+(x+10)+' 30 '+x+' 53',10);}
+      return art;
+    }
+    if(kind==='dna-rapture'){
+      let art=base(13);
+      for(let i=0;i<3;i++){
+        const x=5+i*30;
+        art+=rope('M'+x+' 15 C'+(x+10)+' 15 '+(x+20)+' 45 '+(x+30)+' 45',12);
+        art+=rope('M'+x+' 45 C'+(x+10)+' 45 '+(x+20)+' 15 '+(x+30)+' 15',12);
+      }
+      return art;
+    }
+    let art=base(9),n=kind==='two-beat-isis'?4:6;
+    for(let i=0;i<n;i++){
+      const x=4+i*92/n,step=92/n;
+      if(kind==='two-beat-isis'){
+        art+=rope('M'+x+' 7 L'+(x+step*.85)+' 30 L'+x+' 53',10);
+        art+=rope('M'+(x+step*.85)+' 7 L'+x+' 30 L'+(x+step*.85)+' 53',10);
+      }else{
+        art+=rope('M'+x+' 8 Q'+(x+step)+' 8 '+(x+step)+' 22 L'+x+' 38 Q'+x+' 52 '+(x+step)+' 52',9);
+      }
+    }
+    return art;
+  }
   function renderModel(){
     const length=Number(values.length), diameter=Number(values.diameter);
     const grip=option('grip',values.grip),wick=option('wick',values.wick);
@@ -85,9 +119,10 @@
     attrs(el('gripColor'),{'stop-color':grip.highlight});attrs(el('gripDark'),{'stop-color':grip.color});
     for(const side of ['left','right']){
       const x=side==='left'?x1:x2-gw;
-      for(const part of ['wick','texture']){
-        attrs(el(side+part),{x,y:150-gh/2,width:gw,height:gh,rx:5});
-      }
+      const group=el(side+'wick');
+      const sx=gw/100,sy=gh/60;
+      attrs(group,{transform:side==='left'?'translate('+x+' '+(150-gh/2)+') scale('+sx+' '+sy+')':'translate('+(x+gw)+' '+(150-gh/2)+') scale('+(-sx)+' '+sy+')'});
+      group.innerHTML=wickArt(wick.value);
     }
     // The full model remains scaled consistently; detail views are camera zooms.
     el('dimension').textContent=length+' cm';
@@ -97,7 +132,7 @@
   }
   function targetCamera(){
     if(view==='grip'){const w=Math.max(300,geometry.gripWidth+85);return [450-w/2,150-w/6,w,w/3];}
-    if(view==='wick'){const w=240;const cx=geometry.x2-geometry.gw/2;return [cx-w/2,150-w/6,w,w/3];}
+    if(view==='wick'){const w=Math.max(240,geometry.gh*3.8,geometry.gw+65);const cx=geometry.x2-geometry.gw/2;return [cx-w/2,150-w/6,w,w/3];}
     if(view==='diameter'){const w=240;const cx=geometry.x1+geometry.width*.15;return [cx-w/2,150-w/6,w,w/3];}
     const w=Math.max(900,geometry.width+110);return [450-w/2,150-w/6,w,w/3];
   }

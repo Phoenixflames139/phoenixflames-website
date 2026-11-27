@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/page-transitions.css?v=6">
   <script src="/page-transitions.js?v=6"></script>
   <link rel="stylesheet" href="/staff-configurator.css?v=1">
-  <script defer src="/staff-configurator.js?v=1"></script>
+  <script defer src="/staff-configurator.js?v=2"></script>
 </head>
 <body>
 
@@ -69,8 +69,8 @@
             <rect data-part="shaft" x="105" y="143" width="690" height="14" rx="7" fill="url(#staff-metal)" stroke="#d4d4d4" stroke-width=".5"/>
             <rect data-part="grip" x="284" y="139.5" width="332" height="21" rx="10.5" fill="url(#staff-grip)" stroke="#888" stroke-width=".6"/>
             <rect data-part="gripTexture" x="284" y="139.5" width="332" height="21" rx="10.5" fill="url(#staff-grip-pattern)"/>
-            <g stroke="#c6a567" stroke-width=".7"><rect data-part="leftwick" x="105" y="125.5" width="74" height="49" rx="5" fill="url(#staff-wick)"/><rect data-part="rightwick" x="721" y="125.5" width="74" height="49" rx="5" fill="url(#staff-wick)"/></g>
-            <rect data-part="lefttexture" x="105" y="125.5" width="74" height="49" rx="5" fill="url(#staff-woven)"/><rect data-part="righttexture" x="721" y="125.5" width="74" height="49" rx="5" fill="url(#staff-woven)"/>
+            <g data-part="leftwick" transform="translate(105 125.5) scale(.74 .8167)"><rect x="1" y="1" width="98" height="58" rx="5" fill="url(#staff-wick)"/><rect x="2" y="2" width="96" height="56" rx="4" fill="url(#staff-woven)"/></g>
+            <g data-part="rightwick" transform="translate(795 125.5) scale(-.74 .8167)"><rect x="1" y="1" width="98" height="58" rx="5" fill="url(#staff-wick)"/><rect x="2" y="2" width="96" height="56" rx="4" fill="url(#staff-woven)"/></g>
             <g stroke="#b89960" opacity=".6" stroke-width="1"><line data-part="measure" x1="105" y1="224" x2="795" y2="224"/><line data-part="tickL" x1="105" y1="217" x2="105" y2="231"/><line data-part="tickR" x1="795" y1="217" x2="795" y2="231"/></g>
             <text data-part="dimension" x="450" y="248" text-anchor="middle" fill="#d5bc8a" font-size="16" font-family="Arial,sans-serif">150 cm</text>
           </svg>
@@ -84,7 +84,7 @@
             <div><dt>Staff length</dt><dd data-summary="length">150 cm</dd></div>
             <div><dt>Diameter</dt><dd data-summary="diameter">25 mm</dd></div>
             <div><dt>Grip</dt><dd data-summary="grip">Black</dd></div>
-            <div><dt>Wick</dt><dd data-summary="wick">Medium</dd></div>
+            <div><dt>Wick</dt><dd data-summary="wick">Sushi Roll</dd></div>
           </dl>
         </div>
         <div class="staff-controls">
@@ -94,7 +94,7 @@
           <div class="staff-field"><label for="staff-length">Staff length</label><select id="staff-length" data-staff-option="length" aria-describedby="hint-length"></select><small id="hint-length">Changes the overall length in the model.</small></div>
           <div class="staff-field"><label for="staff-diameter">Diameter</label><select id="staff-diameter" data-staff-option="diameter" aria-describedby="hint-diameter"></select><small id="hint-diameter">The preview focuses on the shaft.</small></div>
           <div class="staff-field"><label for="staff-grip">Grip</label><select id="staff-grip" data-staff-option="grip" aria-describedby="hint-grip"></select><small id="hint-grip">Choose an illustrative grip colour.</small></div>
-          <div class="staff-field"><label for="staff-wick">Wick</label><select id="staff-wick" data-staff-option="wick" aria-describedby="hint-wick"></select><small id="hint-wick">Choose an illustrative wick appearance.</small></div>
+          <div class="staff-field"><label for="staff-wick">Wick</label><select id="staff-wick" data-staff-option="wick" aria-describedby="hint-wick"></select><small id="hint-wick">Select a wick model. The illustration shows its shape and texture schematically.</small></div>
           <div class="staff-price"><span>Price</span><strong data-price>On request</strong></div>
           <a class="button button-primary staff-request" href="/en/booking.html" aria-disabled="true">Request this configuration</a>
           <p class="staff-request-note">Non-binding. No order or payment.</p>
