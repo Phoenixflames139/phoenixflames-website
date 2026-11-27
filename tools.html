@@ -12,8 +12,9 @@
   <link rel="alternate" hreflang="x-default" href="https://phoenixflames.de/tools.html">
   <link rel="stylesheet" href="/page-transitions.css?v=6">
   <script src="/page-transitions.js?v=6"></script>
-  <link rel="stylesheet" href="/staff-configurator.css?v=1">
-  <script defer src="/staff-configurator.js?v=3"></script>
+  <link rel="stylesheet" href="/staff-configurator.css?v=2">
+  <script defer src="/staff-configurator.js?v=4"></script>
+  <script defer src="/staff-model-3d.js?v=1"></script>
 </head>
 <body>
 
@@ -74,6 +75,8 @@
             <g stroke="#b89960" opacity=".6" stroke-width="1"><line data-part="measure" x1="105" y1="224" x2="795" y2="224"/><line data-part="tickL" x1="105" y1="217" x2="105" y2="231"/><line data-part="tickR" x1="795" y1="217" x2="795" y2="231"/></g>
             <text data-part="dimension" x="450" y="248" text-anchor="middle" fill="#d5bc8a" font-size="16" font-family="Arial,sans-serif">150 cm</text>
           </svg>
+          <canvas class="staff-3d-canvas" data-staff-3d hidden tabindex="0" aria-label="Interaktives 3D-Stabmodell. Pfeiltasten drehen, Plus und Minus zoomen."></canvas>
+          <div class="staff-3d-help" data-staff-3d-help hidden><span>3D · Ziehen zum Drehen · Zwei Finger zum Zoomen</span><button type="button" data-3d-zoom="0.85" aria-label="Verkleinern">−</button><button type="button" data-3d-zoom="1.18" aria-label="Vergrößern">+</button></div>
           <div class="staff-view-buttons" aria-label="Modellansicht">
             <button type="button" data-staff-view="full" aria-pressed="true">Gesamt</button>
             <button type="button" data-staff-view="diameter" aria-pressed="false">Durchmesser</button>

@@ -44,3 +44,12 @@
   .staff-view-buttons{padding:0 10px 9px}
   .staff-summary{display:none}
 }
+
+/* Interactive 3D canvas, with existing SVG retained as fallback. */
+.staff-preview [hidden]{display:none!important}
+.staff-3d-canvas{display:block;width:100%;height:auto;aspect-ratio:3/1;cursor:grab;touch-action:none;outline-offset:-3px}
+.staff-3d-canvas:active{cursor:grabbing}
+.staff-3d-canvas:focus-visible{outline:2px solid var(--gold)}
+.staff-3d-help{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 12px 10px;color:#b7b7b7;font-size:.73rem}
+.staff-3d-help button{font:inherit;min-width:30px;min-height:28px;border:1px solid #554b39;border-radius:6px;color:var(--gold);background:#181818;cursor:pointer}
+@media(max-width:800px) and (min-height:650px){.staff-3d-canvas{max-height:142px}.staff-3d-help{padding-bottom:5px}}

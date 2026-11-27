@@ -113,6 +113,7 @@
   }
   function setView(next,instant=false){
     view=next;
+    studio.dispatchEvent(new CustomEvent('staff:view',{detail:{view,instant}}));
     const names={full:T('Gesamtansicht','Full view'),grip:T('Grip im Fokus','Grip detail'),wick:T('Wick im Fokus','Wick detail'),diameter:T('Durchmesser im Fokus','Diameter detail')};
     studio.querySelector('[data-view-label]').textContent=names[view];
     studio.querySelectorAll('[data-staff-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.staffView===view)));
