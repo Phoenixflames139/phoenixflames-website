@@ -63,7 +63,7 @@ function build(v){
  return {vertices:new Float32Array(data),L,W,R};
 }
 let gl,program,buffer,locations;
-const vs='attribute vec3 aPosition; attribute vec3 aNormal; attribute vec2 aUV; attribute vec3 aColor; attribute float aMaterial; uniform vec3 uTarget,uRight,uUp,uForward; uniform vec2 uScale; varying vec3 vNormal,vColor; varying vec2 vUV; varying float vMaterial; void main(){vec3 p=aPosition-uTarget;gl_Position=vec4(dot(p,uRight)*uScale.x,dot(p,uUp)*uScale.y,-dot(p,uForward)/240.0,1.0);vNormal=vec3(dot(aNormal,uRight),dot(aNormal,uUp),dot(aNormal,uForward));vUV=aUV;vColor=aColor;vMaterial=aMaterial;}';
+const vs='precision mediump float; attribute vec3 aPosition; attribute vec3 aNormal; attribute vec2 aUV; attribute vec3 aColor; attribute float aMaterial; uniform vec3 uTarget,uRight,uUp,uForward; uniform vec2 uScale; varying vec3 vNormal,vColor; varying vec2 vUV; varying float vMaterial; void main(){vec3 p=aPosition-uTarget;gl_Position=vec4(dot(p,uRight)*uScale.x,dot(p,uUp)*uScale.y,-dot(p,uForward)/240.0,1.0);vNormal=vec3(dot(aNormal,uRight),dot(aNormal,uUp),dot(aNormal,uForward));vUV=aUV;vColor=aColor;vMaterial=aMaterial;}';
 const fs='precision mediump float; varying vec3 vNormal,vColor; varying vec2 vUV; varying float vMaterial; void main(){vec3 n=normalize(vNormal);float diffuse=max(0.0,dot(n,normalize(vec3(-.35,.8,.65))));float rim=pow(1.0-max(0.0,n.z),2.0)*.10;float grain=1.0;float shine=0.0;if(vMaterial>.5&&vMaterial<1.5){float warp=sin(vUV.x*39.0+sin(vUV.y*43.0)*.7);float weft=sin(vUV.y*43.0);grain=.92+.075*warp+.055*weft+.045*warp*weft;}else if(vMaterial>1.5){grain=.93+.06*sin(vUV.x*12.0+vUV.y*18.0);shine=.055*pow(max(0.0,dot(n,normalize(vec3(-.18,.4,1.0)))),20.0);}else{shine=.52*pow(max(0.0,dot(n,normalize(vec3(-.18,.4,1.0)))),28.0);grain=.97+.025*sin(vUV.y*58.0);}gl_FragColor=vec4(clamp(vColor*(.40+.68*diffuse+rim)*grain+vec3(shine),0.0,1.0),1.0);}';
 function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
 function init(){
@@ -99,7 +99,7 @@ function sync(next,instant=false){
  const v=values();if(!v.length||!v.diameter||!shapes[v.wick])return;
  const key=JSON.stringify(v),changed=key!==signature;
  if(changed){model=build(v);signature=key;gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,model.vertices,gl.STATIC_DRAW);}
- if(next!==view||instant||changed)focus(next,instant);else draw();
+ focus(next,instant);
 }
 function fail(){ready=false;cancelAnimationFrame(animation);canvas.hidden=true;help.hidden=true;fallback.hidden=false;}
 try{init();canvas.hidden=false;fallback.hidden=true;help.hidden=false;ready=true;sync('full',true);}catch(e){console.warn('Contact Staff 3D fallback:',e);fail();return;}
